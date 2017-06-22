@@ -6,7 +6,7 @@ import main.voiceactivitydetector.observer.VoiceNotifiable;
 /**
  * Created by alvaro on 6/22/17.
  */
-public class Test {
+public class VADSample {
 
     public static void main(String[] args){
 

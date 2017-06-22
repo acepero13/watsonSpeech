@@ -7,7 +7,7 @@ import javax.sound.sampled.LineUnavailableException;
 /**
  * Created by alvaro on 6/22/17.
  */
-public class Recognition {
+public class RecognitionSample {
     public static void main(String [] args) throws LineUnavailableException {
 
         WatsonRecognition.startWatsonRecognitionThread();
