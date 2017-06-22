@@ -1,7 +1,7 @@
 package main;
 
 import main.voiceactivitydetector.VoiceActivityDetector;
-import main.voiceactivitydetector.VoiceNotifiable;
+import main.voiceactivitydetector.observer.VoiceNotifiable;
 
 /**
  * Created by alvaro on 6/22/17.
@@ -12,7 +12,8 @@ public class Test {
 
         Thread thread = new Thread(new Runnable() {
             public void run() {
-                final VoiceActivityDetector voiceActivityDetector = new VoiceActivityDetector(new VoiceNotifiable() {
+                final VoiceActivityDetector voiceActivityDetector = new VoiceActivityDetector();
+                voiceActivityDetector.register(new VoiceNotifiable() {
                     public void handleSpeakingActivity(boolean speaking) {
                         if(speaking)
                             System.out.println("Speaking....");
