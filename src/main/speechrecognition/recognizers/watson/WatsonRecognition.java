@@ -46,14 +46,13 @@ public class WatsonRecognition {
 
     private void createListener() {
         isLstening = true;
-        return;
-       /* service.recognizeUsingWebSocket(audible.getAudioStream(), recognitionOptions, new BaseRecognizeCallback() {
+        service.recognizeUsingWebSocket(audible.getAudioStream(), recognitionOptions, new BaseRecognizeCallback() {
             @Override
             public void onTranscription(SpeechResults speechResults) {
                String parsed = parser.parse(speechResults);
                System.out.println(parsed);
             }
-        });*/
+        });
     }
 
     private void buildRecognitionObject() {
