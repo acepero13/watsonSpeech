@@ -17,7 +17,7 @@ import java.util.LinkedList;
 /**
  * Created by alvaro on 6/22/17.
  */
-public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActivityObserver {
+public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActivityObserver, Runnable {
     public static final int BUFFER_SIZE = 441;
     LinkedList<VoiceActivityProcessor> featureStrategies = new LinkedList<VoiceActivityProcessor>();
     private AudioDispatcher dispatcher;
@@ -31,11 +31,7 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
     }
 
     public void startListening() {
-        try {
-            init();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        new Thread(this).start();
     }
 
     private void init() throws LineUnavailableException {
@@ -87,6 +83,15 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
     public void notifyDetection(boolean speaking) {
         for (VoiceNotifiable notifiable : observers) {
             notifiable.handleSpeakingActivity(speaking);
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            init();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,4 +1,4 @@
-package main.speechrecognition;
+package main;
 
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
 
@@ -10,12 +10,13 @@ import javax.sound.sampled.LineUnavailableException;
 public class RecognitionSample {
     public static void main(String [] args) throws LineUnavailableException {
 
-        WatsonRecognition.startWatsonRecognitionThread();
+        WatsonRecognition watsonRecognition = new WatsonRecognition();
         try {
-            Thread.sleep(3000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Fin.");
+        watsonRecognition.stopRecognition();
     }
 }

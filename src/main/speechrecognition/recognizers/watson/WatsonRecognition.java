@@ -22,7 +22,13 @@ public class WatsonRecognition {
     private RecognizeOptions recognitionOptions;
     private final ResultParser parser;
 
-    protected WatsonRecognition(){
+    public boolean isLstening() {
+        return isLstening;
+    }
+
+    private boolean isLstening = false;
+
+    public WatsonRecognition(){
         configuration = new WatsonConfiguration();
         audible = new Microphone();
         audible.startListening();
@@ -32,24 +38,22 @@ public class WatsonRecognition {
         createListener();
     }
 
-    public static Thread startWatsonRecognitionThread(){
-        Thread watsonThread = new Thread(new Runnable() {
-            public void run() {
-                new WatsonRecognition();
-            }
-        });
-        watsonThread.start();
-        return watsonThread;
+
+    public void stopRecognition(){
+        audible.stopListening();
+        isLstening = false;
     }
 
     private void createListener() {
-        service.recognizeUsingWebSocket(audible.getAudioStream(), recognitionOptions, new BaseRecognizeCallback() {
+        isLstening = true;
+        return;
+       /* service.recognizeUsingWebSocket(audible.getAudioStream(), recognitionOptions, new BaseRecognizeCallback() {
             @Override
             public void onTranscription(SpeechResults speechResults) {
                String parsed = parser.parse(speechResults);
                System.out.println(parsed);
             }
-        });
+        });*/
     }
 
     private void buildRecognitionObject() {
