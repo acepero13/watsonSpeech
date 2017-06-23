@@ -40,7 +40,8 @@ public class WatsonRecognition {
 
 
     public void stopRecognition(){
-        audible.stopListening();
+        if(isLstening)
+            audible.stopListening();
         isLstening = false;
     }
 

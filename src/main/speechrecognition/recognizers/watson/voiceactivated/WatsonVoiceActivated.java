@@ -9,6 +9,9 @@ import java.util.TimerTask;
 
 /**
  * Created by alvaro on 6/23/17.
+ *
+ * TODO: Make function: markToSpeecj, indicates explicitly that the user wants to talk and it should wait at least
+ * 3 times what the usuar silence pause is
  */
 public class WatsonVoiceActivated implements VoiceNotifiable {
     private static final int SILENCE_THRESHOLD_IN_SECONDS = 5;
@@ -24,26 +27,25 @@ public class WatsonVoiceActivated implements VoiceNotifiable {
     }
 
     public void startListening(){
-        voiceActivityDetector.startListening();
         startWatsonRecognition();
+        voiceActivityDetector.startListening();
         startTimerSilenceTask();
     }
 
     private void startTimerSilenceTask() {
         Timer timer = new Timer();
-        timer.schedule(silenceTask, 0, SILENCE_THRESHOLD_IN_SECONDS * 1000);
+        int milliseconds = SILENCE_THRESHOLD_IN_SECONDS * 1000;
+        timer.schedule(silenceTask, milliseconds, milliseconds);
     }
 
     private void startWatsonRecognition() {
-        System.out.println("Recognizing speech!!!, Activating recognition");
         watsonRecognition = new WatsonRecognition();
-        //
     }
 
     public void check() {
         if(noVoiceDetectedWithinTime()){
             watsonRecognition.stopRecognition();
-            System.out.println("No voice detected in " + SILENCE_THRESHOLD_IN_SECONDS + " seconds, stopping recognition");
+            System.out.println("Pause of " + SILENCE_THRESHOLD_IN_SECONDS + " seconds without talking, stopping recognition");
         }
         voiceDetected = false;
     }
@@ -62,6 +64,7 @@ public class WatsonVoiceActivated implements VoiceNotifiable {
 
     private void startRecognitionIfStopped() {
         if(!watsonRecognition.isLstening()){
+            System.out.println("Start recognition after voice activity....");
             startWatsonRecognition();
         }
     }
