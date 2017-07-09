@@ -21,20 +21,26 @@ public class VadProcessor implements AudioProcessor {
     private Features features;
     private HashMap<Integer, Boolean> voicedFrame = new HashMap<>();
     private MinFeatures minFeatures = new MinFeatures();
+    private int speechStreak = 0;
+    private int silenceStreak = 0;
 
 
     @Override
     public boolean process(AudioEvent audioEvent) {
-        byte[] tmp = audioEvent.getByteBuffer();
-        byte[] arr = {tmp[0], tmp[1] };
-        Float f = ByteBuffer.wrap(arr).order(ByteOrder.LITTLE_ENDIAN).getFloat();
         createFeatures(audioEvent);
         int featureCounter = calculateFeatures();
-        System.out.println(featureCounter);
         if(featureCounter > 1){
             voicedFrame.put(frameCounter, true);
+            speechStreak++;
+            silenceStreak = 0;
         }else{
+            silenceStreak++;
+            speechStreak = 0;
             voicedFrame.put(frameCounter, false);
+        }
+
+        if(speechStreak > 5){
+            System.out.println("SPEEEEECH!!!!!!!!!!!!!!!!!!!!!!!!");
         }
         frameCounter++;
         return true;
@@ -64,6 +70,5 @@ public class VadProcessor implements AudioProcessor {
 
     @Override
     public void processingFinished() {
-        System.out.println(voicedFrame);
     }
 }

@@ -2,6 +2,7 @@ package vad.moannar.util;
 
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.util.fft.FFT;
+import vad.moannar.audio.AudioProvider;
 
 /**
  * Created by alvaro on 7/8/17.
@@ -37,5 +38,9 @@ public class Amplitude {
 
     public float[] getAmplitudes(){
         return amplitudes;
+    }
+
+    public int getFrequencyFromBin(int bin){
+        return (int) fft.binToHz(bin, AudioProvider.SAMPLE_RATE);
     }
 }

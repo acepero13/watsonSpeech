@@ -5,6 +5,7 @@ import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import vad.moannar.audio.AudioProvider;
 import vad.moannar.audio.FileAudioProvider;
+import vad.moannar.audio.MicrophoneAudioProvider;
 import vad.moannar.processors.VadProcessor;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -20,7 +21,7 @@ public class VAD {
     AudioProvider provider;
 
     public VAD(){
-        provider = new FileAudioProvider("/home/alvaro/Downloads/Listener-master/analysis.wav");
+        provider = new MicrophoneAudioProvider();
         AudioProcessor vadProcessor = new VadProcessor();
         provider.addAudioProcessor(vadProcessor);
     }

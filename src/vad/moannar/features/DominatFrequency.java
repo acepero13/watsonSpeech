@@ -24,11 +24,15 @@ public class DominatFrequency implements Feature {
 
     private double getDominantFrequency() {
         double maxMagnitude = Double.MIN_VALUE;
+        int maxPos = 0;
+        int counter = 0;
         for (float magnitude : amplitude.getAmplitudes()) {
             if (magnitude > maxMagnitude) {
                 maxMagnitude = magnitude;
+                maxPos = counter;
             }
+            counter++;
         }
-        return maxMagnitude;
+        return amplitude.getFrequencyFromBin(maxPos);
     }
 }

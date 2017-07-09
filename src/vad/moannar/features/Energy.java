@@ -20,9 +20,7 @@ public class Energy implements Feature {
     }
 
     public double calculate(){
-        double value = Math.pow(localEnergy(), 0.5);
-        value = value * buffer.length;
-        return value;
+        return Math.pow(localEnergy(), 0.5);
     }
 
     private double linearToDecibel(double value) {
@@ -32,6 +30,7 @@ public class Energy implements Feature {
     private double localEnergy() {
         double power = 0.0D;
         for (float element : buffer) {
+            element /=  (1.0f / 32767.0f);
             power += element * element;
         }
         return power;

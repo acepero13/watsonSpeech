@@ -20,7 +20,7 @@ public class SpectralFlatnessMeasure implements Feature {
 
     @Override
     public double calculate() {
-        return 10 * Math.log10(calculateGeometricMean() / calculateArithmeticMean());
+        return Math.abs(10 * Math.log10(calculateGeometricMean() / calculateArithmeticMean()));
     }
 
     private double calculateArithmeticMean(){
