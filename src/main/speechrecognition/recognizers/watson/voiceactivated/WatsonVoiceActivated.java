@@ -5,7 +5,7 @@ import main.speechrecognition.notification.WatsonSpeechObservable;
 import main.speechrecognition.notification.WatsonSpeechObserver;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
 import vad.voiceactivitydetector.VoiceActivityDetector;
-import vad.voiceactivitydetector.observer.VoiceNotifiable;
+import vad.observer.VoiceNotifiable;
 
 import java.util.LinkedList;
 import java.util.Timer;

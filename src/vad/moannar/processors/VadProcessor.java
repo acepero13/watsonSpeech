@@ -4,6 +4,9 @@ import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
 import vad.moannar.features.Features;
 import vad.moannar.features.MinFeatures;
+import vad.observer.VoiceActivityObserver;
+import vad.observer.VoiceNotifiable;
+import vad.observer.VoiceNotifier;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,9 +16,10 @@ import java.util.LinkedList;
 /**
  * Created by alvaro on 7/9/17.
  */
-public class VadProcessor implements AudioProcessor {
+public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     public static final int THIRTY_FRAME_MARK = 30;
+    private final VoiceNotifier notifier;
 
     private int  frameCounter = 0;
     private Features features;
@@ -24,11 +28,22 @@ public class VadProcessor implements AudioProcessor {
     private int speechStreak = 0;
     private int silenceStreak = 0;
 
+    public VadProcessor(){
+        notifier = new VoiceNotifier();
+    }
+
 
     @Override
     public boolean process(AudioEvent audioEvent) {
         createFeatures(audioEvent);
         int featureCounter = calculateFeatures();
+        markSpeechFrame(featureCounter);
+        notifySpeech();
+        frameCounter++;
+        return true;
+    }
+
+    private void markSpeechFrame(int featureCounter) {
         if(featureCounter > 1){
             voicedFrame.put(frameCounter, true);
             speechStreak++;
@@ -38,12 +53,15 @@ public class VadProcessor implements AudioProcessor {
             speechStreak = 0;
             voicedFrame.put(frameCounter, false);
         }
+    }
 
+    private void notifySpeech() {
         if(speechStreak > 5){
-            System.out.println("SPEEEEECH!!!!!!!!!!!!!!!!!!!!!!!!");
+            notifier.notifyDetection(true);
         }
-        frameCounter++;
-        return true;
+        if(silenceStreak > 10){
+            notifier.notifyDetection(false);
+        }
     }
 
     private void createFeatures(AudioEvent audioEvent) {
@@ -70,5 +88,20 @@ public class VadProcessor implements AudioProcessor {
 
     @Override
     public void processingFinished() {
+    }
+
+    @Override
+    public void register(VoiceNotifiable notifiable) {
+        notifier.register(notifiable);
+    }
+
+    @Override
+    public void unregister(VoiceNotifiable notifiable) {
+        notifier.unregister(notifiable);
+    }
+
+    @Override
+    public void notifyDetection(boolean speaking) {
+        notifier.notifyDetection(speaking);
     }
 }

@@ -1,7 +1,7 @@
 package main;
 
 import vad.voiceactivitydetector.VoiceActivityDetector;
-import vad.voiceactivitydetector.observer.VoiceNotifiable;
+import vad.observer.VoiceNotifiable;
 
 /**
  * Created by alvaro on 6/22/17.

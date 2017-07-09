@@ -4,8 +4,9 @@ import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import main.speechrecognition.audioproviders.Audible;
-import vad.voiceactivitydetector.observer.VoiceActivityObserver;
-import vad.voiceactivitydetector.observer.VoiceNotifiable;
+import vad.observer.VoiceActivityObserver;
+import vad.observer.VoiceNotifiable;
+import vad.observer.VoiceNotifier;
 import vad.voiceactivitydetector.processors.VoiceActivityProcessor;
 import vad.voiceactivitydetector.processors.energy.EnergyBased;
 import vad.voiceactivitydetector.processors.pitch.PitchBased;
@@ -25,11 +26,13 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
     private AudioDispatcher dispatcher;
     private boolean isSpeakingAccordingToEnergy = false;
     private boolean isSpeakingAccordingToPitch = false;
-    private LinkedList<VoiceNotifiable> observers = new LinkedList<VoiceNotifiable>();
+    private VoiceNotifier notifier;
+
 
     public VoiceActivityDetector() {
         featureStrategies.add(new EnergyBased(this));
         featureStrategies.add(PitchBased.YIN_Default(this));
+        notifier = new VoiceNotifier();
     }
 
     public void startListening() {
@@ -85,17 +88,15 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
     }
 
     public void register(VoiceNotifiable notifiable) {
-        observers.add(notifiable);
+        notifier.register(notifiable);
     }
 
     public void unregister(VoiceNotifiable notifiable) {
-        observers.remove(notifiable);
+        notifier.unregister(notifiable);
     }
 
     public void notifyDetection(boolean speaking) {
-        for (VoiceNotifiable notifiable : observers) {
-            notifiable.handleSpeakingActivity(speaking);
-        }
+        notifier.notifyDetection(speaking);
     }
 
     @Override

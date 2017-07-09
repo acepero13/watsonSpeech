@@ -40,10 +40,14 @@ public class Features {
     }
 
     public int calculate(){
+        calculateFeatures();
+        return featureCounter();
+    }
+
+    private void calculateFeatures() {
         frameEnergy = energy.calculate();
         frameDominantFrequency = dominantFrequency.calculate();
         frameSfm = sfm.calculate();
-        return featureCounter();
     }
 
     private int featureCounter() {
@@ -59,7 +63,7 @@ public class Features {
     }
 
     public int  calculateMinimum(){
-        calculate();
+        calculateFeatures();
         if(isFirstFrame){
             minimums.setMinimums(frameEnergy, frameDominantFrequency, frameSfm);
         }else{
@@ -67,8 +71,5 @@ public class Features {
         }
         return featureCounter();
     }
-
-
-
 
 }
