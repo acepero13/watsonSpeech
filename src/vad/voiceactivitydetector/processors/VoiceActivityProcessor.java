@@ -1,4 +1,4 @@
-package main.voiceactivitydetector.processors;
+package vad.voiceactivitydetector.processors;
 
 import be.tarsos.dsp.AudioProcessor;
 

@@ -4,8 +4,8 @@ import main.speechrecognition.audioproviders.Audible;
 import main.speechrecognition.notification.WatsonSpeechObservable;
 import main.speechrecognition.notification.WatsonSpeechObserver;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
-import main.voiceactivitydetector.VoiceActivityDetector;
-import main.voiceactivitydetector.observer.VoiceNotifiable;
+import vad.voiceactivitydetector.VoiceActivityDetector;
+import vad.voiceactivitydetector.observer.VoiceNotifiable;
 
 import java.util.LinkedList;
 import java.util.Timer;

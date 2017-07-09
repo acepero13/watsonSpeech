@@ -1,14 +1,14 @@
-package main.voiceactivitydetector;
+package vad.voiceactivitydetector;
 
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioProcessor;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import main.speechrecognition.audioproviders.Audible;
-import main.voiceactivitydetector.observer.VoiceActivityObserver;
-import main.voiceactivitydetector.observer.VoiceNotifiable;
-import main.voiceactivitydetector.processors.VoiceActivityProcessor;
-import main.voiceactivitydetector.processors.energy.EnergyBased;
-import main.voiceactivitydetector.processors.pitch.PitchBased;
+import vad.voiceactivitydetector.observer.VoiceActivityObserver;
+import vad.voiceactivitydetector.observer.VoiceNotifiable;
+import vad.voiceactivitydetector.processors.VoiceActivityProcessor;
+import vad.voiceactivitydetector.processors.energy.EnergyBased;
+import vad.voiceactivitydetector.processors.pitch.PitchBased;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;

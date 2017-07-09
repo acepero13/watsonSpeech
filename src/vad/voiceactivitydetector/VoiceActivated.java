@@ -1,4 +1,4 @@
-package main.voiceactivitydetector;
+package vad.voiceactivitydetector;
 
 /**
  * Created by alvaro on 6/22/17.

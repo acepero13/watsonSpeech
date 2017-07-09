@@ -14,11 +14,19 @@ public class Energy implements Feature {
     private final float[] buffer;
 
     public Energy(AudioEvent audioEvent){
+
         this.buffer = audioEvent.getFloatBuffer().clone();
+        
     }
 
     public double calculate(){
-        return localEnergy();
+        double value = Math.pow(localEnergy(), 0.5);
+        value = value * buffer.length;
+        return value;
+    }
+
+    private double linearToDecibel(double value) {
+        return 20.0 * Math.log10(value);
     }
 
     private double localEnergy() {

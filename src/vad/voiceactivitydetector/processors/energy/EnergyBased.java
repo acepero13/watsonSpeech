@@ -1,10 +1,8 @@
-package main.voiceactivitydetector.processors.energy;
+package vad.voiceactivitydetector.processors.energy;
 
 import be.tarsos.dsp.AudioEvent;
-import be.tarsos.dsp.AudioProcessor;
-import main.voiceactivitydetector.VoiceActivated;
-import main.voiceactivitydetector.VoiceActivityDetector;
-import main.voiceactivitydetector.processors.VoiceActivityProcessor;
+import vad.voiceactivitydetector.VoiceActivated;
+import vad.voiceactivitydetector.processors.VoiceActivityProcessor;
 
 /**
  * Created by alvaro on 6/22/17.

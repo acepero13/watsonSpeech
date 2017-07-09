@@ -1,4 +1,4 @@
-package main.voiceactivitydetector.observer;
+package vad.voiceactivitydetector.observer;
 
 /**
  * Created by alvaro on 6/22/17.

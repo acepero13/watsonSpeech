@@ -1,10 +1,10 @@
-package main.voiceactivitydetector.processors.pitch;
+package vad.voiceactivitydetector.processors.pitch;
 
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchProcessor;
-import main.voiceactivitydetector.VoiceActivityDetector;
-import main.voiceactivitydetector.processors.VoiceActivityProcessor;
+import vad.voiceactivitydetector.VoiceActivityDetector;
+import vad.voiceactivitydetector.processors.VoiceActivityProcessor;
 
 /**
  * Created by alvaro on 6/22/17.

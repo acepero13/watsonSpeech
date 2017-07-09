@@ -13,14 +13,14 @@ public class SpectralFlatnessMeasure implements Feature {
 
     private final float[] amplitudes;
 
-    SpectralFlatnessMeasure(AudioEvent audioEvent){
+    public SpectralFlatnessMeasure(AudioEvent audioEvent){
         Amplitude amplitude = new Amplitude(audioEvent);
         amplitudes = amplitude.getAmplitudes();
     }
 
     @Override
     public double calculate() {
-        return Math.abs(calculateGeometricMean() / calculateArithmeticMean());
+        return 10 * Math.log10(calculateGeometricMean() / calculateArithmeticMean());
     }
 
     private double calculateArithmeticMean(){
@@ -34,7 +34,7 @@ public class SpectralFlatnessMeasure implements Feature {
         if(isBufferEmpty()){
             return 1;
         }
-        return Math.exp(geometricMean()) ;
+        return Math.pow(10, geometricMean()) ;
     }
 
     private double geometricMean() {
@@ -44,7 +44,7 @@ public class SpectralFlatnessMeasure implements Feature {
     private double logSum() {
         double sum = 0;
         for (float value: amplitudes ) {
-            sum += Math.log(value);
+            sum += Math.log10(value);
         }
         return sum;
     }
