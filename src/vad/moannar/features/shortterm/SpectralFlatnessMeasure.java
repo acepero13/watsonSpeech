@@ -1,4 +1,4 @@
-package vad.moannar.features;
+package vad.moannar.features.shortterm;
 
 import be.tarsos.dsp.AudioEvent;
 import vad.moannar.Feature;

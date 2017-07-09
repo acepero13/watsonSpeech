@@ -2,6 +2,9 @@ package vad.moannar.features;
 
 import be.tarsos.dsp.AudioEvent;
 import vad.moannar.Feature;
+import vad.moannar.features.shortterm.DominatFrequency;
+import vad.moannar.features.shortterm.Energy;
+import vad.moannar.features.shortterm.SpectralFlatnessMeasure;
 
 /**
  * Created by alvaro on 7/9/17.

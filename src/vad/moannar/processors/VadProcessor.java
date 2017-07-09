@@ -16,6 +16,8 @@ import java.util.HashMap;
 public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     public static final int THIRTY_FRAME_MARK = 30;
+    public static final int SPEECH_THRESHOLD = 5;
+    public static final int SILENCE_THRESHOLD = 10;
     private final VoiceNotifier notifier;
 
     private int frameCounter = 0;
@@ -53,10 +55,10 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     }
 
     private void notifySpeech() {
-        if (speechStreak > 5) {
+        if (speechStreak > SPEECH_THRESHOLD) {
             notifier.notifyDetection(true);
         }
-        if (silenceStreak > 10) {
+        if (silenceStreak > SILENCE_THRESHOLD) {
             notifier.notifyDetection(false);
         }
     }
@@ -70,7 +72,7 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     private int calculateFeatures() {
         int frameCounter;
-        if (isFirstThirtyFrames()) {
+        if (isFrameForThresholdInitialization()) {
             frameCounter = features.calculateMinimum();
         } else {
             frameCounter = features.calculate();
@@ -79,7 +81,7 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     }
 
 
-    private boolean isFirstThirtyFrames() {
+    private boolean isFrameForThresholdInitialization() {
         return frameCounter < THIRTY_FRAME_MARK;
     }
 

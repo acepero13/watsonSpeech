@@ -23,6 +23,7 @@ public class VADMoattarSample {
                             System.out.println("Speaking");
                             isSpeakingStatus = true;
                         } else if (!speaking && isSpeakingStatus) {
+                            System.out.println();
                             System.out.println("Silence");
                             isSpeakingStatus = false;
                         }

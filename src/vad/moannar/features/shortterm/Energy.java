@@ -1,4 +1,4 @@
-package vad.moannar.features;
+package vad.moannar.features.shortterm;
 
 import be.tarsos.dsp.AudioEvent;
 import vad.moannar.Feature;
@@ -23,9 +23,6 @@ public class Energy implements Feature {
         return Math.pow(localEnergy(), 0.5);
     }
 
-    private double linearToDecibel(double value) {
-        return 20.0 * Math.log10(value);
-    }
 
     private double localEnergy() {
         double power = 0.0D;
