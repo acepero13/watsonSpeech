@@ -12,15 +12,16 @@ public class Amplitude {
     private final AudioEvent audioEvent;
     private float[] amplitudes;
     private int bufferSize;
-    private  FFT fft;
+    private FFT fft;
     private float[] audioFloatBuffer;
 
-    public Amplitude(AudioEvent audioEvent){
+    public Amplitude(AudioEvent audioEvent) {
         this.audioEvent = audioEvent;
         initAmplitudes();
         prepareBuffer();
         computeMagnitude();
     }
+
     private void prepareBuffer() {
         fft = new FFT(bufferSize);
         audioFloatBuffer = audioEvent.getFloatBuffer().clone();
@@ -28,19 +29,19 @@ public class Amplitude {
 
     private void initAmplitudes() {
         bufferSize = audioEvent.getBufferSize();
-        amplitudes = new float[bufferSize /2];
+        amplitudes = new float[bufferSize / 2];
     }
 
-    private void computeMagnitude(){
+    private void computeMagnitude() {
         fft.forwardTransform(audioFloatBuffer);
         fft.modulus(audioFloatBuffer, amplitudes);
     }
 
-    public float[] getAmplitudes(){
+    public float[] getAmplitudes() {
         return amplitudes;
     }
 
-    public int getFrequencyFromBin(int bin){
+    public int getFrequencyFromBin(int bin) {
         return (int) fft.binToHz(bin, AudioProvider.SAMPLE_RATE);
     }
 }

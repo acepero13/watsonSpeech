@@ -8,10 +8,7 @@ import vad.observer.VoiceActivityObserver;
 import vad.observer.VoiceNotifiable;
 import vad.observer.VoiceNotifier;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * Created by alvaro on 7/9/17.
@@ -21,14 +18,14 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     public static final int THIRTY_FRAME_MARK = 30;
     private final VoiceNotifier notifier;
 
-    private int  frameCounter = 0;
+    private int frameCounter = 0;
     private Features features;
     private HashMap<Integer, Boolean> voicedFrame = new HashMap<>();
     private MinFeatures minFeatures = new MinFeatures();
     private int speechStreak = 0;
     private int silenceStreak = 0;
 
-    public VadProcessor(){
+    public VadProcessor() {
         notifier = new VoiceNotifier();
     }
 
@@ -44,11 +41,11 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     }
 
     private void markSpeechFrame(int featureCounter) {
-        if(featureCounter > 1){
+        if (featureCounter > 1) {
             voicedFrame.put(frameCounter, true);
             speechStreak++;
             silenceStreak = 0;
-        }else{
+        } else {
             silenceStreak++;
             speechStreak = 0;
             voicedFrame.put(frameCounter, false);
@@ -56,16 +53,16 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     }
 
     private void notifySpeech() {
-        if(speechStreak > 5){
+        if (speechStreak > 5) {
             notifier.notifyDetection(true);
         }
-        if(silenceStreak > 10){
+        if (silenceStreak > 10) {
             notifier.notifyDetection(false);
         }
     }
 
     private void createFeatures(AudioEvent audioEvent) {
-        if(frameCounter == 0)
+        if (frameCounter == 0)
             features = new Features(audioEvent, true, minFeatures);
         else
             features = new Features(audioEvent, minFeatures);
@@ -73,9 +70,9 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     private int calculateFeatures() {
         int frameCounter;
-        if(isFirstThirtyFrames()){
+        if (isFirstThirtyFrames()) {
             frameCounter = features.calculateMinimum();
-        }else{
+        } else {
             frameCounter = features.calculate();
         }
         return frameCounter;

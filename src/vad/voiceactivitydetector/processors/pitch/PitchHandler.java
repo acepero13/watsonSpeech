@@ -12,11 +12,12 @@ public class PitchHandler implements PitchDetectionHandler {
 
     private final VoiceActivityDetector context;
 
-    PitchHandler(VoiceActivityDetector context){
+    PitchHandler(VoiceActivityDetector context) {
         this.context = context;
     }
+
     public void handlePitch(PitchDetectionResult pitchDetectionResult, AudioEvent audioEvent) {
-        if(pitchDetectionResult.getPitch() != -1) {
+        if (pitchDetectionResult.getPitch() != -1) {
             double timeStamp = audioEvent.getTimeStamp();
             float pitch = pitchDetectionResult.getPitch();
             float probability = pitchDetectionResult.getProbability();

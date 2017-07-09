@@ -15,34 +15,33 @@ import main.speechrecognition.parsers.watson.WatsonParser;
 
 /**
  * Created by alvaro on 6/22/17.
- *  .inactivityTimeout(5) // use this to stop listening when the speaker pauses, i.e. for 5s
+ * .inactivityTimeout(5) // use this to stop listening when the speaker pauses, i.e. for 5s
  */
 public class WatsonRecognition implements WatsonSpeechObservable {
 
+    private final WatsonSpeechNotifier notifier;
     WatsonConfiguration configuration;
     Audible audible;
     private SpeechToText service;
     private RecognizeOptions recognitionOptions;
-    private  ResultParser parser;
-    private final WatsonSpeechNotifier notifier;
-
-    public boolean isLstening() {
-        return isLstening;
-    }
-
+    private ResultParser parser;
     private boolean isLstening = false;
 
-    public WatsonRecognition(){
+    public WatsonRecognition() {
         audible = new Microphone();
         notifier = new WatsonSpeechNotifier();
         init();
     }
 
-    public WatsonRecognition(Audible audible){
+    public WatsonRecognition(Audible audible) {
         this.audible = audible;
         notifier = new WatsonSpeechNotifier();
         init();
 
+    }
+
+    public boolean isLstening() {
+        return isLstening;
     }
 
     private void init() {
@@ -55,8 +54,8 @@ public class WatsonRecognition implements WatsonSpeechObservable {
     }
 
 
-    public void stopRecognition(){
-        if(isLstening)
+    public void stopRecognition() {
+        if (isLstening)
             audible.stopListening();
         isLstening = false;
     }
@@ -89,7 +88,7 @@ public class WatsonRecognition implements WatsonSpeechObservable {
     private void createService() {
         service = new SpeechToText();
         service.setUsernameAndPassword(configuration.getUsername(), configuration.getPassword());
-        service.setEndPoint( configuration.getEndPoint());
+        service.setEndPoint(configuration.getEndPoint());
     }
 
     @Override

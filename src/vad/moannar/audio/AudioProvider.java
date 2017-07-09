@@ -16,17 +16,17 @@ public abstract class AudioProvider {
     protected int size;
     protected AudioDispatcher dispatcher;
 
-    public AudioProvider(){
+    public AudioProvider() {
         size = calculateFrameSize();
     }
 
     private int calculateFrameSize() {
-        return (int)(SAMPLE_RATE * (VAD.FRAME_DURATION / 1000.0));
+        return (int) (SAMPLE_RATE * (VAD.FRAME_DURATION / 1000.0));
     }
 
     public abstract void createDispatcher() throws IOException, UnsupportedAudioFileException, LineUnavailableException;
 
-    public void addAudioProcessor(AudioProcessor processor){
+    public void addAudioProcessor(AudioProcessor processor) {
         try {
             createDispatcher();
             dispatcher.addAudioProcessor(processor);
@@ -36,7 +36,7 @@ public abstract class AudioProvider {
 
     }
 
-    public void process(){
+    public void process() {
         dispatcher.run();
     }
 

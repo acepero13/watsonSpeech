@@ -23,7 +23,7 @@ public class Features {
 
     private boolean isFirstFrame = true;
 
-    public Features(AudioEvent audioEvent, MinFeatures minimums){
+    public Features(AudioEvent audioEvent, MinFeatures minimums) {
         energy = new Energy(audioEvent);
         dominantFrequency = new DominatFrequency(audioEvent);
         sfm = new SpectralFlatnessMeasure(audioEvent);
@@ -31,7 +31,7 @@ public class Features {
         this.minimums = minimums;
     }
 
-    public Features(AudioEvent audioEvent, boolean isFirstFrame, MinFeatures minimums){
+    public Features(AudioEvent audioEvent, boolean isFirstFrame, MinFeatures minimums) {
         energy = new Energy(audioEvent);
         dominantFrequency = new DominatFrequency(audioEvent);
         sfm = new SpectralFlatnessMeasure(audioEvent);
@@ -39,7 +39,7 @@ public class Features {
         this.minimums = minimums;
     }
 
-    public int calculate(){
+    public int calculate() {
         calculateFeatures();
         return featureCounter();
     }
@@ -53,20 +53,20 @@ public class Features {
     private int featureCounter() {
         int counter = 0;
         double energyThreshold = ENERGY_PRIM_THRESHOLD * Math.log10(Math.abs(minimums.getMinEnergy()));
-        if((frameEnergy - minimums.getMinEnergy()) > energyThreshold)
+        if ((frameEnergy - minimums.getMinEnergy()) > energyThreshold)
             counter++;
-        if((frameDominantFrequency - minimums.getMinDominantFrequency()) > FREQ_PRIM_THRESHOLD)
+        if ((frameDominantFrequency - minimums.getMinDominantFrequency()) > FREQ_PRIM_THRESHOLD)
             counter++;
-        if((frameSfm - minimums.getMinSFM()) > SFM_PRIM_THRESHOLD)
-            counter ++;
+        if ((frameSfm - minimums.getMinSFM()) > SFM_PRIM_THRESHOLD)
+            counter++;
         return counter;
     }
 
-    public int  calculateMinimum(){
+    public int calculateMinimum() {
         calculateFeatures();
-        if(isFirstFrame){
+        if (isFirstFrame) {
             minimums.setMinimums(frameEnergy, frameDominantFrequency, frameSfm);
-        }else{
+        } else {
             minimums.calculateMinFeatures(frameEnergy, frameDominantFrequency, frameSfm);
         }
         return featureCounter();

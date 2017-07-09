@@ -20,7 +20,7 @@ public class WatsonSpeechNotifier implements WatsonSpeechObservable {
 
     @Override
     public void notifySpeechObservers(String spokenText) {
-        for (WatsonSpeechObserver observer: observers ) {
+        for (WatsonSpeechObserver observer : observers) {
             observer.onSpeech(spokenText);
         }
     }

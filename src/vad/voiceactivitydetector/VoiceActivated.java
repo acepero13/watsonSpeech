@@ -5,6 +5,8 @@ package vad.voiceactivitydetector;
  */
 public interface VoiceActivated {
     void setEnergyActivity(boolean isSpeaking);
+
     void setPitchActivity(boolean isSpeaking);
+
     boolean isSpeaking();
 }

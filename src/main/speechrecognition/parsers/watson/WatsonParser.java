@@ -20,10 +20,10 @@ public class WatsonParser implements ResultParser {
 
     public String parse(SpeechResults speechResults) {
         StringBuilder finalText = new StringBuilder();
-        for (Transcript result: speechResults.getResults()) {
-            if(!result.isFinal() && onlyRespondToFinal){
+        for (Transcript result : speechResults.getResults()) {
+            if (!result.isFinal() && onlyRespondToFinal) {
                 continue;
-            }else {
+            } else {
                 finalText.append(getSpokenText(result));
             }
         }
@@ -31,7 +31,7 @@ public class WatsonParser implements ResultParser {
     }
 
     private String getSpokenText(Transcript result) {
-        if(!result.getAlternatives().isEmpty())
+        if (!result.getAlternatives().isEmpty())
             return result.getAlternatives().get(0).getTranscript();//Return the first
         return "";
     }

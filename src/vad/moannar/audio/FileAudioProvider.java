@@ -9,11 +9,11 @@ import java.io.IOException;
 /**
  * Created by alvaro on 7/9/17.
  */
-public class FileAudioProvider extends AudioProvider{
+public class FileAudioProvider extends AudioProvider {
 
     private final String filename;
 
-    public FileAudioProvider(String filename){
+    public FileAudioProvider(String filename) {
         super();
         this.filename = filename;
     }

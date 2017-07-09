@@ -1,35 +1,32 @@
 package vad.moannar;
 
-import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioProcessor;
-import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
+import main.speechrecognition.audioproviders.Audible;
 import vad.moannar.audio.AudioProvider;
-import vad.moannar.audio.FileAudioProvider;
 import vad.moannar.audio.MicrophoneAudioProvider;
 import vad.moannar.processors.VadProcessor;
 import vad.observer.VoiceActivityObserver;
 import vad.observer.VoiceNotifiable;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.File;
-import java.io.IOException;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.TargetDataLine;
 
 /**
  * Created by alvaro on 7/9/17.
  */
-public class VAD implements VoiceActivityObserver{
+public class VAD implements VoiceActivityObserver, Audible, Runnable {
     public static final int FRAME_DURATION = 10;
-    AudioProvider provider;
     private final AudioProcessor vadProcessor;
+    AudioProvider provider;
 
-    public VAD(){
+    public VAD() {
         provider = new MicrophoneAudioProvider();
         vadProcessor = new VadProcessor();
         provider.addAudioProcessor(vadProcessor);
     }
 
-    public void process(){
+    public void process() {
         processAudio();
     }
 
@@ -43,7 +40,7 @@ public class VAD implements VoiceActivityObserver{
     }
 
     private VoiceActivityObserver getAsObserver() {
-        return (VoiceActivityObserver)vadProcessor;
+        return (VoiceActivityObserver) vadProcessor;
     }
 
     @Override
@@ -53,5 +50,36 @@ public class VAD implements VoiceActivityObserver{
 
     @Override
     public void notifyDetection(boolean speaking) {
+    }
+
+
+    @Override
+    public void startListening() {
+        (new Thread(this)).start();
+    }
+
+    @Override
+    public AudioInputStream getAudioStream() {
+        return null;
+    }
+
+    @Override
+    public void stopListening() {
+
+    }
+
+    @Override
+    public TargetDataLine getDataLine() {
+        return null;
+    }
+
+    @Override
+    public AudioFormat getAudioFormat() {
+        return null;
+    }
+
+    @Override
+    public void run() {
+        process();
     }
 }

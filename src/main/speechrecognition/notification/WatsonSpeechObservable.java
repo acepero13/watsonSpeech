@@ -5,6 +5,8 @@ package main.speechrecognition.notification;
  */
 public interface WatsonSpeechObservable {
     void register(WatsonSpeechObserver observer);
+
     void unregister(WatsonSpeechObserver observer);
+
     void notifySpeechObservers(String spokenText);
 }

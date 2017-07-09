@@ -9,8 +9,12 @@ import javax.sound.sampled.TargetDataLine;
  */
 public interface Audible {
     void startListening();
+
     AudioInputStream getAudioStream();
+
     void stopListening();
+
     TargetDataLine getDataLine();
+
     AudioFormat getAudioFormat();
 }

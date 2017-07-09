@@ -8,7 +8,7 @@ import java.util.TimerTask;
 public class SilenceTask extends TimerTask {
     private final WatsonVoiceActivated watsonVoiceActivated;
 
-    public SilenceTask(WatsonVoiceActivated watsonVoiceActivated){
+    public SilenceTask(WatsonVoiceActivated watsonVoiceActivated) {
         this.watsonVoiceActivated = watsonVoiceActivated;
     }
 

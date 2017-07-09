@@ -6,14 +6,14 @@ import vad.moannar.util.Amplitude;
 
 /**
  * Created by alvaro on 7/8/17.
- *  the most dominant frequency component of the speech frame spectrum can be very useful in discriminating
- between speech and silence frames
+ * the most dominant frequency component of the speech frame spectrum can be very useful in discriminating
+ * between speech and silence frames
  */
 public class DominatFrequency implements Feature {
 
     private final Amplitude amplitude;
 
-    public DominatFrequency(AudioEvent audioEvent){
+    public DominatFrequency(AudioEvent audioEvent) {
         this.amplitude = new Amplitude(audioEvent);
     }
 

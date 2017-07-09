@@ -5,7 +5,9 @@ package vad.observer;
  */
 public interface VoiceActivityObserver {
     void register(VoiceNotifiable notifiable);
+
     void unregister(VoiceNotifiable notifiable);
-     void notifyDetection(boolean speaking);
+
+    void notifyDetection(boolean speaking);
 
 }

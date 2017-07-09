@@ -18,7 +18,7 @@ public class PitchBased extends PitchProcessor implements VoiceActivityProcessor
         super(algorithm, sampleRate, bufferSize, handler);
     }
 
-    public static PitchBased YIN_Default(VoiceActivityDetector voiceActivityDetector){
+    public static PitchBased YIN_Default(VoiceActivityDetector voiceActivityDetector) {
         return new PitchBased(PitchEstimationAlgorithm.YIN, SAMPLE_RATE,
                 VoiceActivityDetector.BUFFER_SIZE,
                 new PitchHandler(voiceActivityDetector));
