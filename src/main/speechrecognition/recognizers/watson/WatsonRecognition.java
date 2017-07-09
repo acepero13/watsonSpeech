@@ -7,6 +7,9 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 import main.speechrecognition.audioproviders.Audible;
 import main.speechrecognition.audioproviders.Microphone;
+import main.speechrecognition.notification.WatsonSpeechNotifier;
+import main.speechrecognition.notification.WatsonSpeechObservable;
+import main.speechrecognition.notification.WatsonSpeechObserver;
 import main.speechrecognition.parsers.ResultParser;
 import main.speechrecognition.parsers.watson.WatsonParser;
 
@@ -14,13 +17,14 @@ import main.speechrecognition.parsers.watson.WatsonParser;
  * Created by alvaro on 6/22/17.
  *  .inactivityTimeout(5) // use this to stop listening when the speaker pauses, i.e. for 5s
  */
-public class WatsonRecognition {
+public class WatsonRecognition implements WatsonSpeechObservable {
 
     WatsonConfiguration configuration;
     Audible audible;
     private SpeechToText service;
     private RecognizeOptions recognitionOptions;
-    private final ResultParser parser;
+    private  ResultParser parser;
+    private final WatsonSpeechNotifier notifier;
 
     public boolean isLstening() {
         return isLstening;
@@ -29,8 +33,20 @@ public class WatsonRecognition {
     private boolean isLstening = false;
 
     public WatsonRecognition(){
-        configuration = new WatsonConfiguration();
         audible = new Microphone();
+        notifier = new WatsonSpeechNotifier();
+        init();
+    }
+
+    public WatsonRecognition(Audible audible){
+        this.audible = audible;
+        notifier = new WatsonSpeechNotifier();
+        init();
+
+    }
+
+    private void init() {
+        configuration = new WatsonConfiguration();
         audible.startListening();
         parser = new WatsonParser(true);
         createService();
@@ -50,8 +66,8 @@ public class WatsonRecognition {
         service.recognizeUsingWebSocket(audible.getAudioStream(), recognitionOptions, new BaseRecognizeCallback() {
             @Override
             public void onTranscription(SpeechResults speechResults) {
-               String parsed = parser.parse(speechResults);
-               System.out.println(parsed);
+                String parsed = parser.parse(speechResults);
+                notifySpeechObservers(parsed);
             }
         });
     }
@@ -76,4 +92,18 @@ public class WatsonRecognition {
         service.setEndPoint( configuration.getEndPoint());
     }
 
+    @Override
+    public void register(WatsonSpeechObserver observer) {
+        notifier.register(observer);
+    }
+
+    @Override
+    public void unregister(WatsonSpeechObserver observer) {
+        notifier.unregister(observer);
+    }
+
+    @Override
+    public void notifySpeechObservers(String spokenText) {
+        notifier.notifySpeechObservers(spokenText);
+    }
 }

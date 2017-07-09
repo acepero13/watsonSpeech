@@ -10,8 +10,10 @@ import main.voiceactivitydetector.processors.VoiceActivityProcessor;
 import main.voiceactivitydetector.processors.energy.EnergyBased;
 import main.voiceactivitydetector.processors.pitch.PitchBased;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.TargetDataLine;
 import java.util.LinkedList;
 
 /**
@@ -56,6 +58,16 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
 
     public void stopListening() {
 
+    }
+
+    @Override
+    public TargetDataLine getDataLine() {
+        return null;
+    }
+
+    @Override
+    public AudioFormat getAudioFormat() {
+        return null;
     }
 
     public void setEnergyActivity(boolean isSpeaking) {

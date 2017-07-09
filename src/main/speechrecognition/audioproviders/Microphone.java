@@ -13,6 +13,7 @@ public class Microphone implements Audible {
     private DataLine.Info info;
     private TargetDataLine line;
     private AudioInputStream audio;
+    private AudioFormat format;
 
     public Microphone() {
 
@@ -44,7 +45,7 @@ public class Microphone implements Audible {
     }
 
     private AudioFormat createAudioFormatFromLine() {
-        AudioFormat format = new AudioFormat(SAMPLE_RATE, SAMPLE_SIZE_IN_BITS, CHANNELS, true, false);
+        format = new AudioFormat(SAMPLE_RATE, SAMPLE_SIZE_IN_BITS, CHANNELS, true, false);
         info = new DataLine.Info(TargetDataLine.class, format);
         return format;
     }
@@ -62,5 +63,15 @@ public class Microphone implements Audible {
     public void stopListening() {
         line.stop();
         line.close();
+    }
+
+    @Override
+    public TargetDataLine getDataLine() {
+        return line;
+    }
+
+    @Override
+    public AudioFormat getAudioFormat() {
+        return format;
     }
 }
