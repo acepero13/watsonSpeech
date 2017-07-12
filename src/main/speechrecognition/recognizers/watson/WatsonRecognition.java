@@ -48,8 +48,11 @@ public class WatsonRecognition implements WatsonSpeechObservable {
         configuration = new WatsonConfiguration();
         audible.startListening();
         parser = new WatsonParser(true);
-        createService();
         buildRecognitionObject();
+        createService();
+    }
+
+    public void startListening(){
         createListener();
     }
 

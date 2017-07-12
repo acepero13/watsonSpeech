@@ -9,7 +9,7 @@ import vad.voiceactivitydetector.processors.VoiceActivityProcessor;
  */
 public class EnergyBased implements VoiceActivityProcessor {
 
-    public static final int SILENCE_THRESHOLD = -40;
+    public static final int SILENCE_THRESHOLD = -60;
     private final VoiceActivated voiceActivated;
     private boolean silence;
 

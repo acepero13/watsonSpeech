@@ -17,7 +17,7 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     public static final int THIRTY_FRAME_MARK = 30;
     public static final int SPEECH_THRESHOLD = 5;
-    public static final int SILENCE_THRESHOLD = 10;
+    public static final int SILENCE_THRESHOLD = 20;
     private final VoiceNotifier notifier;
 
     private int frameCounter = 0;

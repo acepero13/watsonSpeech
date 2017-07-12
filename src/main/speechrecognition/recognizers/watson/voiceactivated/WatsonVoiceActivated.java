@@ -4,6 +4,8 @@ import main.speechrecognition.audioproviders.Audible;
 import main.speechrecognition.notification.WatsonSpeechObservable;
 import main.speechrecognition.notification.WatsonSpeechObserver;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
+import vad.moannar.VAD;
+import vad.observer.VoiceActivityObserver;
 import vad.observer.VoiceNotifiable;
 import vad.voiceactivitydetector.VoiceActivityDetector;
 
@@ -21,13 +23,23 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     private static final int SILENCE_THRESHOLD_IN_SECONDS = 5;
     private final Audible audible;
     WatsonRecognition watsonRecognition;
-    VoiceActivityDetector voiceActivityDetector;
+    VoiceActivityObserver voiceActivityDetector;
     private boolean voiceDetected = false;
     private TimerTask silenceTask = new SilenceTask(this);
     private LinkedList<WatsonSpeechObserver> cachedObservers = new LinkedList<>();
+    static boolean forceAwake = false;
+
+
+    public void forceAwake(){
+        forceAwake = true;
+    }
+
+    public void disableForceAwake(){
+        forceAwake = false;
+    }
 
     public WatsonVoiceActivated() {
-        voiceActivityDetector = new VoiceActivityDetector();
+        voiceActivityDetector = new VAD();
         voiceActivityDetector.register(this);
         audible = null;
     }
@@ -40,10 +52,12 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     }
 
     public void startListening() {
-        startWatsonRecognition();
-        voiceActivityDetector.startListening();
+        createWatsonRecognition();
+        restartRecognition();
+        ((Audible)voiceActivityDetector).startListening();
         startTimerSilenceTask();
     }
+
 
     private void startTimerSilenceTask() {
         Timer timer = new Timer();
@@ -51,10 +65,10 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
         timer.schedule(silenceTask, milliseconds, milliseconds);
     }
 
-    private void startWatsonRecognition() {
+    private void createWatsonRecognition() {
         if (audible == null)
             watsonRecognition = new WatsonRecognition();
-        else
+        else if(watsonRecognition == null)
             watsonRecognition = new WatsonRecognition(audible);
     }
 
@@ -63,6 +77,7 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
             watsonRecognition.stopRecognition();
             unregisterCachedObservers();
             System.out.println("Pause of " + SILENCE_THRESHOLD_IN_SECONDS + " seconds without talking, stopping recognition");
+            createWatsonRecognition();
         }
         voiceDetected = false;
     }
@@ -74,7 +89,7 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     }
 
     private boolean noVoiceDetectedWithinTime() {
-        return !voiceDetected;
+        return !voiceDetected && !forceAwake;
     }
 
     @Override
@@ -88,9 +103,14 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     private void startRecognitionIfStopped() {
         if (!watsonRecognition.isLstening()) {
             System.out.println("Start recognition after voice activity....");
-            startWatsonRecognition();
-            registerCachedObservers();
+            restartRecognition();
         }
+    }
+
+    public void restartRecognition() {
+        createWatsonRecognition();
+        registerCachedObservers();
+        watsonRecognition.startListening();
     }
 
     private void registerCachedObservers() {
