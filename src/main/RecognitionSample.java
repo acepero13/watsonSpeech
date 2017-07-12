@@ -1,6 +1,6 @@
 package main;
 
-import main.speechrecognition.notification.WatsonSpeechObserver;
+import main.speechrecognition.notification.SpeechObserver;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -13,7 +13,7 @@ public class RecognitionSample {
 
         WatsonRecognition watsonRecognition = new WatsonRecognition();
         watsonRecognition.startListening();
-        watsonRecognition.register(new WatsonSpeechObserver() {
+        watsonRecognition.register(new SpeechObserver() {
             @Override
             public void onSpeech(String spokenText) {
                 System.out.println(spokenText);

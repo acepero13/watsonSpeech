@@ -47,6 +47,27 @@
             <systemPath>${basedir}/lib/TarsosDSP-2.4.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud</artifactId>
+            <version>0.20.0-alpha</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.api.grpc</groupId>
+            <artifactId>grpc-google-cloud-speech-v1</artifactId>
+            <version>0.1.8</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
 

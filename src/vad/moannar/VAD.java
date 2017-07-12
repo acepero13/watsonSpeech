@@ -58,25 +58,14 @@ public class VAD implements VoiceActivityObserver, Audible, Runnable {
         (new Thread(this)).start();
     }
 
-    @Override
-    public AudioInputStream getAudioStream() {
-        return null;
-    }
+
 
     @Override
     public void stopListening() {
 
     }
 
-    @Override
-    public TargetDataLine getDataLine() {
-        return null;
-    }
 
-    @Override
-    public AudioFormat getAudioFormat() {
-        return null;
-    }
 
     @Override
     public void run() {

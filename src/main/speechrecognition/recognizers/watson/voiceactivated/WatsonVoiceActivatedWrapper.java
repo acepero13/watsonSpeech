@@ -1,8 +1,6 @@
 package main.speechrecognition.recognizers.watson.voiceactivated;
 
-import main.speechrecognition.notification.WatsonSpeechObservable;
-import main.speechrecognition.notification.WatsonSpeechObserver;
-import vad.observer.VoiceNotifiable;
+import main.speechrecognition.notification.SpeechObserver;
 
 /**
  * Created by alvaro on 7/12/17.
@@ -14,11 +12,11 @@ public class WatsonVoiceActivatedWrapper  {
         activated.startListening();
     }
 
-    public static  void register(WatsonSpeechObserver observer){
+    public static  void register(SpeechObserver observer){
         activated.register(observer);
     }
 
-    public static void unregister(WatsonSpeechObserver observer){
+    public static void unregister(SpeechObserver observer){
         activated.unregister(observer);
     }
 

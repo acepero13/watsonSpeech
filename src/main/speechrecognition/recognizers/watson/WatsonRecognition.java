@@ -6,10 +6,11 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 import main.speechrecognition.audioproviders.Audible;
-import main.speechrecognition.audioproviders.Microphone;
-import main.speechrecognition.notification.WatsonSpeechNotifier;
-import main.speechrecognition.notification.WatsonSpeechObservable;
-import main.speechrecognition.notification.WatsonSpeechObserver;
+import main.speechrecognition.audioproviders.AudioRecord;
+import main.speechrecognition.audioproviders.microphone.Microphone;
+import main.speechrecognition.notification.SpeechNotifier;
+import main.speechrecognition.notification.SpeechObservable;
+import main.speechrecognition.notification.SpeechObserver;
 import main.speechrecognition.parsers.ResultParser;
 import main.speechrecognition.parsers.watson.WatsonParser;
 
@@ -17,11 +18,11 @@ import main.speechrecognition.parsers.watson.WatsonParser;
  * Created by alvaro on 6/22/17.
  * .inactivityTimeout(5) // use this to stop listening when the speaker pauses, i.e. for 5s
  */
-public class WatsonRecognition implements WatsonSpeechObservable {
+public class WatsonRecognition implements SpeechObservable {
 
-    private final WatsonSpeechNotifier notifier;
+    private final SpeechNotifier notifier;
     WatsonConfiguration configuration;
-    Audible audible;
+    AudioRecord audible;
     private SpeechToText service;
     private RecognizeOptions recognitionOptions;
     private ResultParser parser;
@@ -29,13 +30,13 @@ public class WatsonRecognition implements WatsonSpeechObservable {
 
     public WatsonRecognition() {
         audible = new Microphone();
-        notifier = new WatsonSpeechNotifier();
+        notifier = new SpeechNotifier();
         init();
     }
 
-    public WatsonRecognition(Audible audible) {
+    public WatsonRecognition(AudioRecord audible) {
         this.audible = audible;
-        notifier = new WatsonSpeechNotifier();
+        notifier = new SpeechNotifier();
         init();
 
     }
@@ -95,12 +96,12 @@ public class WatsonRecognition implements WatsonSpeechObservable {
     }
 
     @Override
-    public void register(WatsonSpeechObserver observer) {
+    public void register(SpeechObserver observer) {
         notifier.register(observer);
     }
 
     @Override
-    public void unregister(WatsonSpeechObserver observer) {
+    public void unregister(SpeechObserver observer) {
         notifier.unregister(observer);
     }
 

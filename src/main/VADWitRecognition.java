@@ -1,6 +1,6 @@
 package main;
 
-import main.speechrecognition.notification.WatsonSpeechObserver;
+import main.speechrecognition.notification.SpeechObserver;
 import main.speechrecognition.recognizers.watson.voiceactivated.WatsonVoiceActivated;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -13,7 +13,7 @@ public class VADWitRecognition {
         WatsonVoiceActivated activated = new WatsonVoiceActivated();
 
         activated.startListening();
-        activated.register(new WatsonSpeechObserver() {
+        activated.register(new SpeechObserver() {
             @Override
             public void onSpeech(String spokenText) {
                 System.out.println(spokenText);

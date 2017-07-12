@@ -1,8 +1,9 @@
 package main.speechrecognition.recognizers.watson.voiceactivated;
 
 import main.speechrecognition.audioproviders.Audible;
-import main.speechrecognition.notification.WatsonSpeechObservable;
-import main.speechrecognition.notification.WatsonSpeechObserver;
+import main.speechrecognition.audioproviders.AudioRecord;
+import main.speechrecognition.notification.SpeechObservable;
+import main.speechrecognition.notification.SpeechObserver;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
 import vad.moannar.VAD;
 import vad.observer.VoiceActivityObserver;
@@ -19,14 +20,14 @@ import java.util.TimerTask;
  * TODO: Make function: markToSpeecj, indicates explicitly that the user wants to talk and it should wait at least
  * 3 times what the usuar silence pause is
  */
-public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObservable {
+public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
     private static final int SILENCE_THRESHOLD_IN_SECONDS = 5;
-    private final Audible audible;
+    private final AudioRecord audible;
     WatsonRecognition watsonRecognition;
     VoiceActivityObserver voiceActivityDetector;
     private boolean voiceDetected = false;
     private TimerTask silenceTask = new SilenceTask(this);
-    private LinkedList<WatsonSpeechObserver> cachedObservers = new LinkedList<>();
+    private LinkedList<SpeechObserver> cachedObservers = new LinkedList<>();
     static boolean forceAwake = false;
 
 
@@ -44,7 +45,7 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
         audible = null;
     }
 
-    public WatsonVoiceActivated(Audible audible) {
+    public WatsonVoiceActivated(AudioRecord audible) {
         voiceActivityDetector = new VoiceActivityDetector();
         voiceActivityDetector.register(this);
         this.audible = audible;
@@ -83,7 +84,7 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     }
 
     private void unregisterCachedObservers() {
-        for (WatsonSpeechObserver observer : cachedObservers) {
+        for (SpeechObserver observer : cachedObservers) {
             watsonRecognition.unregister(observer);
         }
     }
@@ -114,19 +115,19 @@ public class WatsonVoiceActivated implements VoiceNotifiable, WatsonSpeechObserv
     }
 
     private void registerCachedObservers() {
-        for (WatsonSpeechObserver observer : cachedObservers) {
+        for (SpeechObserver observer : cachedObservers) {
             watsonRecognition.register(observer);
         }
     }
 
     @Override
-    public void register(WatsonSpeechObserver observer) {
+    public void register(SpeechObserver observer) {
         watsonRecognition.register(observer);
         cachedObservers.add(observer);
     }
 
     @Override
-    public void unregister(WatsonSpeechObserver observer) {
+    public void unregister(SpeechObserver observer) {
         watsonRecognition.unregister(observer);
         cachedObservers.remove(observer);
     }

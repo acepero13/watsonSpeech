@@ -59,19 +59,11 @@ public class VoiceActivityDetector implements Audible, VoiceActivated, VoiceActi
         return null;
     }
 
+    @Override
     public void stopListening() {
 
     }
 
-    @Override
-    public TargetDataLine getDataLine() {
-        return null;
-    }
-
-    @Override
-    public AudioFormat getAudioFormat() {
-        return null;
-    }
 
     public void setEnergyActivity(boolean isSpeaking) {
         isSpeakingAccordingToEnergy = isSpeaking;
