@@ -13,14 +13,15 @@ import main.speechrecognition.notification.SpeechObservable;
 import main.speechrecognition.notification.SpeechObserver;
 import main.speechrecognition.parsers.ResultParser;
 import main.speechrecognition.parsers.watson.WatsonParser;
+import main.speechrecognition.recognizers.SpeechRecognition;
 
 /**
  * Created by alvaro on 6/22/17.
  * .inactivityTimeout(5) // use this to stop listening when the speaker pauses, i.e. for 5s
  */
-public class WatsonRecognition implements SpeechObservable {
+public class WatsonRecognition extends SpeechRecognition {
 
-    private final SpeechNotifier notifier;
+
     WatsonConfiguration configuration;
     AudioRecord audible;
     private SpeechToText service;
@@ -29,19 +30,19 @@ public class WatsonRecognition implements SpeechObservable {
     private boolean isLstening = false;
 
     public WatsonRecognition() {
+        super();
         audible = new Microphone();
-        notifier = new SpeechNotifier();
         init();
     }
 
     public WatsonRecognition(AudioRecord audible) {
+        super();
         this.audible = audible;
-        notifier = new SpeechNotifier();
         init();
 
     }
 
-    public boolean isLstening() {
+    public boolean isListening() {
         return isLstening;
     }
 
@@ -95,18 +96,4 @@ public class WatsonRecognition implements SpeechObservable {
         service.setEndPoint(configuration.getEndPoint());
     }
 
-    @Override
-    public void register(SpeechObserver observer) {
-        notifier.register(observer);
-    }
-
-    @Override
-    public void unregister(SpeechObserver observer) {
-        notifier.unregister(observer);
-    }
-
-    @Override
-    public void notifySpeechObservers(String spokenText) {
-        notifier.notifySpeechObservers(spokenText);
-    }
 }

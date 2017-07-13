@@ -6,14 +6,14 @@ import java.util.TimerTask;
  * Created by alvaro on 6/23/17.
  */
 public class SilenceTask extends TimerTask {
-    private final WatsonVoiceActivated watsonVoiceActivated;
+    private final SpeechRecognitionVoiceActivated speechRecognitionVoiceActivated;
 
-    public SilenceTask(WatsonVoiceActivated watsonVoiceActivated) {
-        this.watsonVoiceActivated = watsonVoiceActivated;
+    public SilenceTask(SpeechRecognitionVoiceActivated speechRecognitionVoiceActivated) {
+        this.speechRecognitionVoiceActivated = speechRecognitionVoiceActivated;
     }
 
     @Override
     public void run() {
-        watsonVoiceActivated.check();
+        speechRecognitionVoiceActivated.check();
     }
 }

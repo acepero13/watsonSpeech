@@ -12,6 +12,7 @@ import main.speechrecognition.audioproviders.microphone.recordaudio.event.Record
 import main.speechrecognition.notification.SpeechNotifier;
 import main.speechrecognition.notification.SpeechObservable;
 import main.speechrecognition.notification.SpeechObserver;
+import main.speechrecognition.recognizers.SpeechRecognition;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,48 +20,42 @@ import java.util.List;
 /**
  * Created by alvaro on 7/12/17.
  */
-public class GoogleRecognition implements SpeechObservable, RecordAudioObserver, Audible{
+public class GoogleRecognition extends SpeechRecognition implements  RecordAudioObserver{
 
+    private final Thread microphoneThread;
     private RecognitionConfig config;
-    private RecognitionAudio audio;
     private SpeechClient speech;
-    private SpeechSettings settings;
     private GoogleResponseApiStreamingObserver<StreamingRecognizeResponse> responseObserver;
     private StreamingCallable<StreamingRecognizeRequest, StreamingRecognizeResponse> callable;
     private ApiStreamObserver<StreamingRecognizeRequest> requestObserver;
     private StreamingRecognitionConfig streamingConfig;
-
-    private final Thread microphoneThread;
-    private SpeechNotifier notifier;
-
+    private boolean isListening = false;
 
     public GoogleRecognition(){
+        super();
         Microphone microphone = new Microphone();
         microphone.register(this);
         microphoneThread = new Thread(microphone);
     }
 
+    @Override
+    public boolean isListening() {
+        return isListening;
+    }
+
 
     public void init() throws IOException {
-
         speech = SpeechClient.create();
         createConfiguration();
         initRequest();
         requestObserver.onNext(StreamingRecognizeRequest.newBuilder()
                 .setStreamingConfig(streamingConfig)
                 .build());
-        handleNotifier();
     }
 
-    private void handleNotifier() {
-        if(notifier == null){
-            notifier = responseObserver.getNotifier();
-        }else {
-            responseObserver.setNotifier(notifier);
-        }
-    }
 
-    public void close(){
+
+    private void close(){
         try {
             speech.close();
             responseObserver = null;
@@ -70,7 +65,7 @@ public class GoogleRecognition implements SpeechObservable, RecordAudioObserver,
     }
 
     private void initRequest() {
-        responseObserver = new GoogleResponseApiStreamingObserver<StreamingRecognizeResponse>(this);
+        responseObserver = new GoogleResponseApiStreamingObserver<StreamingRecognizeResponse>(this, notifier);
         callable = speech.streamingRecognizeCallable();
         requestObserver = callable.bidiStreamingCall(responseObserver);
     }
@@ -91,6 +86,8 @@ public class GoogleRecognition implements SpeechObservable, RecordAudioObserver,
 
     private void recognize(ByteString data) {
         if(isRecognitionReady()) {
+            isListening = true;
+
             requestObserver.onNext(StreamingRecognizeRequest.newBuilder()
                     .setAudioContent(data)
                     .build());
@@ -116,21 +113,6 @@ public class GoogleRecognition implements SpeechObservable, RecordAudioObserver,
 
 
     @Override
-    public void register(SpeechObserver observer) {
-        responseObserver.register(observer);
-    }
-
-    @Override
-    public void unregister(SpeechObserver observer) {
-        responseObserver.unregister(observer);
-    }
-
-    @Override
-    public void notifySpeechObservers(String spokenText) {
-        responseObserver.notifySpeechObservers(spokenText);
-    }
-
-    @Override
     public void update(RecordAudioEvent event) {
         recognize((ByteString) event.getData());
     }
@@ -141,16 +123,19 @@ public class GoogleRecognition implements SpeechObservable, RecordAudioObserver,
         tryToInit();
     }
 
+    @Override
+    public void stopRecognition() {
+        if(speech ==null){
+            return;
+        }
+        if(responseObserver.hasBeenProcessed())
+            requestObserver.onCompleted();
+        isListening = false;
+        close();
+    }
+
     private void startMicrophone() {
         microphoneThread.start();
     }
-
-
-    @Override
-    public void stopListening() {
-        requestObserver.onCompleted();
-    }
-
-
 
 }

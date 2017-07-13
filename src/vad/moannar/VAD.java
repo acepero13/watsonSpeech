@@ -26,6 +26,12 @@ public class VAD implements VoiceActivityObserver, Audible, Runnable {
         provider.addAudioProcessor(vadProcessor);
     }
 
+    public VAD(int consecutiveSpeechFramesThreshold, int consecutiveSilenceFramesThreshold) {
+        provider = new MicrophoneAudioProvider();
+        vadProcessor = new VadProcessor(consecutiveSpeechFramesThreshold, consecutiveSilenceFramesThreshold);
+        provider.addAudioProcessor(vadProcessor);
+    }
+
     public void process() {
         processAudio();
     }

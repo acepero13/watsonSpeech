@@ -4,6 +4,8 @@ import main.speechrecognition.audioproviders.Audible;
 import main.speechrecognition.audioproviders.AudioRecord;
 import main.speechrecognition.notification.SpeechObservable;
 import main.speechrecognition.notification.SpeechObserver;
+import main.speechrecognition.recognizers.SpeechRecognition;
+import main.speechrecognition.recognizers.google.GoogleRecognition;
 import main.speechrecognition.recognizers.watson.WatsonRecognition;
 import vad.moannar.VAD;
 import vad.observer.VoiceActivityObserver;
@@ -20,10 +22,10 @@ import java.util.TimerTask;
  * TODO: Make function: markToSpeecj, indicates explicitly that the user wants to talk and it should wait at least
  * 3 times what the usuar silence pause is
  */
-public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
+public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechObservable {
     private static final int SILENCE_THRESHOLD_IN_SECONDS = 5;
     private final AudioRecord audible;
-    WatsonRecognition watsonRecognition;
+    SpeechRecognition speechRecognition;
     VoiceActivityObserver voiceActivityDetector;
     private boolean voiceDetected = false;
     private TimerTask silenceTask = new SilenceTask(this);
@@ -39,13 +41,13 @@ public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
         forceAwake = false;
     }
 
-    public WatsonVoiceActivated() {
+    public SpeechRecognitionVoiceActivated() {
         voiceActivityDetector = new VAD();
         voiceActivityDetector.register(this);
         audible = null;
     }
 
-    public WatsonVoiceActivated(AudioRecord audible) {
+    public SpeechRecognitionVoiceActivated(AudioRecord audible) {
         voiceActivityDetector = new VoiceActivityDetector();
         voiceActivityDetector.register(this);
         this.audible = audible;
@@ -53,7 +55,8 @@ public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
     }
 
     public void startListening() {
-        createWatsonRecognition();
+        //createWatsonRecognition();
+        createGoogleRecognition();
         restartRecognition();
         ((Audible)voiceActivityDetector).startListening();
         startTimerSilenceTask();
@@ -68,24 +71,29 @@ public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
 
     private void createWatsonRecognition() {
         if (audible == null)
-            watsonRecognition = new WatsonRecognition();
-        else if(watsonRecognition == null)
-            watsonRecognition = new WatsonRecognition(audible);
+            speechRecognition = new WatsonRecognition();
+        else if(speechRecognition == null)
+            speechRecognition = new WatsonRecognition(audible);
+    }
+
+    private void createGoogleRecognition() {
+            speechRecognition = new GoogleRecognition();
+
     }
 
     void check() {
         if (noVoiceDetectedWithinTime()) {
-            watsonRecognition.stopRecognition();
+            speechRecognition.stopRecognition();
             unregisterCachedObservers();
             System.out.println("Pause of " + SILENCE_THRESHOLD_IN_SECONDS + " seconds without talking, stopping recognition");
-            createWatsonRecognition();
+            createRecognition();
         }
         voiceDetected = false;
     }
 
     private void unregisterCachedObservers() {
         for (SpeechObserver observer : cachedObservers) {
-            watsonRecognition.unregister(observer);
+            speechRecognition.unregister(observer);
         }
     }
 
@@ -102,38 +110,42 @@ public class WatsonVoiceActivated implements VoiceNotifiable, SpeechObservable {
     }
 
     private void startRecognitionIfStopped() {
-        if (!watsonRecognition.isLstening()) {
+        if (!speechRecognition.isListening()) {
             System.out.println("Start recognition after voice activity....");
             restartRecognition();
         }
     }
 
     public void restartRecognition() {
-        createWatsonRecognition();
+        createRecognition();
         registerCachedObservers();
-        watsonRecognition.startListening();
+        speechRecognition.startListening();
+    }
+
+    private void createRecognition() {
+        createGoogleRecognition();
     }
 
     private void registerCachedObservers() {
         for (SpeechObserver observer : cachedObservers) {
-            watsonRecognition.register(observer);
+            speechRecognition.register(observer);
         }
     }
 
     @Override
     public void register(SpeechObserver observer) {
-        watsonRecognition.register(observer);
+        speechRecognition.register(observer);
         cachedObservers.add(observer);
     }
 
     @Override
     public void unregister(SpeechObserver observer) {
-        watsonRecognition.unregister(observer);
+        speechRecognition.unregister(observer);
         cachedObservers.remove(observer);
     }
 
     @Override
     public void notifySpeechObservers(String spokenText) {
-        watsonRecognition.notifySpeechObservers(spokenText);
+        speechRecognition.notifySpeechObservers(spokenText);
     }
 }

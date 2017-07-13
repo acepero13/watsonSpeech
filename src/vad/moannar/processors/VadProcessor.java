@@ -19,6 +19,8 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     public static final int SPEECH_THRESHOLD = 5;
     public static final int SILENCE_THRESHOLD = 20;
     private final VoiceNotifier notifier;
+    private final int consecutiveSpeechFramesThreshold;
+    private final int consecutiveSilenceFramesThreshold;
 
     private int frameCounter = 0;
     private Features features;
@@ -29,6 +31,14 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
 
     public VadProcessor() {
         notifier = new VoiceNotifier();
+        consecutiveSpeechFramesThreshold = SPEECH_THRESHOLD;
+        consecutiveSilenceFramesThreshold = SILENCE_THRESHOLD;
+    }
+
+    public VadProcessor(int consecutiveSpeechFramesThreshold, int consecutiveSilenceFramesThreshold) {
+        notifier = new VoiceNotifier();
+        this.consecutiveSpeechFramesThreshold = consecutiveSpeechFramesThreshold;
+        this.consecutiveSilenceFramesThreshold = consecutiveSilenceFramesThreshold;
     }
 
 
@@ -55,10 +65,10 @@ public class VadProcessor implements AudioProcessor, VoiceActivityObserver {
     }
 
     private void notifySpeech() {
-        if (speechStreak > SPEECH_THRESHOLD) {
+        if (speechStreak > consecutiveSpeechFramesThreshold) {
             notifier.notifyDetection(true);
         }
-        if (silenceStreak > SILENCE_THRESHOLD) {
+        if (silenceStreak > consecutiveSilenceFramesThreshold) {
             notifier.notifyDetection(false);
         }
     }

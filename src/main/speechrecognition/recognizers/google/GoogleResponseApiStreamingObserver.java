@@ -18,9 +18,10 @@ public class GoogleResponseApiStreamingObserver <T> implements ApiStreamObserver
     private final List<T> messages = new java.util.ArrayList<T>();
     private  SpeechNotifier notifier;
     private final GoogleRecognition recognition;
+    private boolean isProcessed;
 
-    public GoogleResponseApiStreamingObserver(GoogleRecognition recognition) {
-        this.notifier = new SpeechNotifier();
+    public GoogleResponseApiStreamingObserver(GoogleRecognition recognition, SpeechNotifier notifier) {
+        this.notifier = notifier;
         this.recognition = recognition;
     }
 
@@ -34,6 +35,7 @@ public class GoogleResponseApiStreamingObserver <T> implements ApiStreamObserver
 
     @Override
     public void onNext(T message) {
+        isProcessed = false;
         messages.add(message);
         String spokenText = parseResults((StreamingRecognizeResponse) message);
         if(!spokenText.isEmpty()) {
@@ -61,6 +63,11 @@ public class GoogleResponseApiStreamingObserver <T> implements ApiStreamObserver
 
     @Override
     public void onCompleted() {
+        isProcessed = true;
+    }
+
+    public boolean hasBeenProcessed(){
+        return isProcessed;
     }
 
 

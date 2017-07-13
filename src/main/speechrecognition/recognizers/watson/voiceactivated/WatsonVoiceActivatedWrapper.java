@@ -6,7 +6,7 @@ import main.speechrecognition.notification.SpeechObserver;
  * Created by alvaro on 7/12/17.
  */
 public class WatsonVoiceActivatedWrapper  {
-    private static WatsonVoiceActivated activated = new WatsonVoiceActivated();
+    private static SpeechRecognitionVoiceActivated activated = new SpeechRecognitionVoiceActivated();
 
     public static void startListening(){
         activated.startListening();
