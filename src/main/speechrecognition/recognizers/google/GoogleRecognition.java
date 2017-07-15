@@ -128,7 +128,7 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
         if(speech ==null){
             return;
         }
-        if(responseObserver.hasBeenProcessed())
+        if(responseObserver!= null && responseObserver.hasBeenProcessed())
             requestObserver.onCompleted();
         isListening = false;
         close();
