@@ -16,7 +16,7 @@ public class VADWitRecognition {
         activated.register(new SpeechObserver() {
             @Override
             public void onSpeech(String spokenText) {
-                System.out.println(spokenText);
+                System.out.println("Spoken: " + spokenText);
             }
         });
         try {

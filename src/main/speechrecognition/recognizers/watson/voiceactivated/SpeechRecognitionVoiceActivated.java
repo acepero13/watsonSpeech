@@ -31,6 +31,7 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
     private TimerTask silenceTask = new SilenceTask(this);
     private LinkedList<SpeechObserver> cachedObservers = new LinkedList<>();
     static boolean forceAwake = false;
+    private boolean starting = false;
 
 
     public void forceAwake(){
@@ -55,8 +56,7 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
     }
 
     public void startListening() {
-        //createWatsonRecognition();
-        createGoogleRecognition();
+        //createRecognition();
         restartRecognition();
         ((Audible)voiceActivityDetector).startListening();
         startTimerSilenceTask();
@@ -86,7 +86,7 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
             speechRecognition.stopRecognition();
             unregisterCachedObservers();
             System.out.println("Pause of " + SILENCE_THRESHOLD_IN_SECONDS + " seconds without talking, stopping recognition");
-            createRecognition();
+            //createRecognition();
         }
         voiceDetected = false;
     }
@@ -109,10 +109,12 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
         }
     }
 
-    private void startRecognitionIfStopped() {
-        if (!speechRecognition.isListening()) {
+    private synchronized void startRecognitionIfStopped() {
+        if (!speechRecognition.isListening() && !starting) {
+            this.starting = true;
             System.out.println("Start recognition after voice activity....");
             restartRecognition();
+            starting = false;
         }
     }
 

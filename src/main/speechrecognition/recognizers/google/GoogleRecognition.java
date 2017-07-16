@@ -30,10 +30,11 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
     private ApiStreamObserver<StreamingRecognizeRequest> requestObserver;
     private StreamingRecognitionConfig streamingConfig;
     private boolean isListening = false;
+    private final Microphone microphone;
 
     public GoogleRecognition(){
         super();
-        Microphone microphone = new Microphone();
+        microphone = new Microphone();
         microphone.register(this);
         microphoneThread = new Thread(microphone);
     }
@@ -53,8 +54,6 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
                 .build());
     }
 
-
-
     private void close(){
         try {
             speech.close();
@@ -62,6 +61,11 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void closeMicrophone() {
+        microphone.unregister(this);
+        microphone.stopListening();
     }
 
     private void initRequest() {
@@ -86,7 +90,7 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
 
     private void recognize(ByteString data) {
         if(isRecognitionReady()) {
-            isListening = true;
+            //isListening = true;
 
             requestObserver.onNext(StreamingRecognizeRequest.newBuilder()
                     .setAudioContent(data)
@@ -121,6 +125,7 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
     public void startListening() {
         startMicrophone();
         tryToInit();
+        isListening = true;
     }
 
     @Override
@@ -131,6 +136,8 @@ public class GoogleRecognition extends SpeechRecognition implements  RecordAudio
         if(responseObserver!= null && responseObserver.hasBeenProcessed())
             requestObserver.onCompleted();
         isListening = false;
+
+        closeMicrophone();
         close();
     }
 

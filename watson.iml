@@ -12,6 +12,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.json:json:20170516" level="project" />
+    <orderEntry type="library" name="Maven: be.hogent.tarsos.dsp:tarsosdsp:1.7" level="project" />
     <orderEntry type="library" name="Maven: com.ibm.watson.developer_cloud:java-sdk:3.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.8.0" level="project" />
