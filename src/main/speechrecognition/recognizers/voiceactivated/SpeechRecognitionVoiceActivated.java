@@ -1,4 +1,4 @@
-package main.speechrecognition.recognizers.watson.voiceactivated;
+package main.speechrecognition.recognizers.voiceactivated;
 
 import main.speechrecognition.audioproviders.Audible;
 import main.speechrecognition.audioproviders.AudioRecord;
@@ -25,6 +25,7 @@ import java.util.TimerTask;
 public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechObservable {
     private static final int SILENCE_THRESHOLD_IN_SECONDS = 5;
     private final AudioRecord audible;
+    private final String speechRecognitionType;
     SpeechRecognition speechRecognition;
     VoiceActivityObserver voiceActivityDetector;
     private boolean voiceDetected = false;
@@ -32,6 +33,9 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
     private LinkedList<SpeechObserver> cachedObservers = new LinkedList<>();
     static boolean forceAwake = false;
     private boolean starting = false;
+    private SpeechRecognitionFactory speechRecognitionFactory;
+
+
 
 
     public void forceAwake(){
@@ -43,16 +47,30 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
     }
 
     public SpeechRecognitionVoiceActivated() {
-        voiceActivityDetector = new VAD();
-        voiceActivityDetector.register(this);
+
         audible = null;
+        speechRecognitionType = "google";
+        init();
     }
 
-    public SpeechRecognitionVoiceActivated(AudioRecord audible) {
-        voiceActivityDetector = new VoiceActivityDetector();
-        voiceActivityDetector.register(this);
-        this.audible = audible;
+    public SpeechRecognitionVoiceActivated(String speechRecognitionType) {
 
+        audible = null;
+        this.speechRecognitionType = speechRecognitionType;
+        init();
+    }
+
+    public SpeechRecognitionVoiceActivated(AudioRecord audible, String speechRecognitionType) {
+
+        this.audible = audible;
+        this.speechRecognitionType = speechRecognitionType;
+        init();
+    }
+
+    private void init() {
+        voiceActivityDetector = new VAD();
+        voiceActivityDetector.register(this);
+        speechRecognitionFactory = new SpeechRecognitionFactory(speechRecognitionType);
     }
 
     public void startListening() {
@@ -69,17 +87,6 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
         timer.schedule(silenceTask, milliseconds, milliseconds);
     }
 
-    private void createWatsonRecognition() {
-        if (audible == null)
-            speechRecognition = new WatsonRecognition();
-        else if(speechRecognition == null)
-            speechRecognition = new WatsonRecognition(audible);
-    }
-
-    private void createGoogleRecognition() {
-            speechRecognition = new GoogleRecognition();
-
-    }
 
     void check() {
         if (noVoiceDetectedWithinTime()) {
@@ -125,7 +132,7 @@ public class SpeechRecognitionVoiceActivated implements VoiceNotifiable, SpeechO
     }
 
     private void createRecognition() {
-        createGoogleRecognition();
+        speechRecognition  = speechRecognitionFactory.create();
     }
 
     private void registerCachedObservers() {

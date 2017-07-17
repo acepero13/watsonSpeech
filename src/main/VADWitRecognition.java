@@ -1,7 +1,7 @@
 package main;
 
 import main.speechrecognition.notification.SpeechObserver;
-import main.speechrecognition.recognizers.watson.voiceactivated.SpeechRecognitionVoiceActivated;
+import main.speechrecognition.recognizers.voiceactivated.SpeechRecognitionVoiceActivated;
 
 import javax.sound.sampled.LineUnavailableException;
 

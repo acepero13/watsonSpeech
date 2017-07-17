@@ -1,4 +1,4 @@
-package main.speechrecognition.recognizers.watson.voiceactivated;
+package main.speechrecognition.recognizers.voiceactivated;
 
 import java.util.TimerTask;
 
