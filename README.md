@@ -1,7 +1,7 @@
 # watsonSpeech and Google speech recognition
 Wrapper library for using watson Speech to Text (https://www.ibm.com/watson/services/speech-to-text/) and Google speech recognition
 
-s
+
 ## watson configuration
 
 Create folder config and inside a file **config.properties** with your watson credentials:
@@ -12,7 +12,7 @@ password=your_watson_password
 endpoint=https://stream-fra.watsonplatform.net/speech-to-text/api
 
 ## Google Speech recognition configuration
-Follow the instructions inatss
+Follow the instructions at
 https://developers.google.com/identity/protocols/application-default-credentials
 
 # VAD
