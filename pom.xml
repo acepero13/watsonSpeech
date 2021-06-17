@@ -57,12 +57,12 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.3.1</version>
+            <version>3.4.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.api.grpc</groupId>
             <artifactId>grpc-google-cloud-speech-v1</artifactId>
-            <version>0.1.8</version>
+            <version>0.24.0</version>
         </dependency>
 
 
